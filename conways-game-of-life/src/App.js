@@ -1,5 +1,6 @@
 import React from 'react';
 import GridCanvas from './components/GridCanvas';
+import './App.css';
 
 class App extends React.Component {
   constructor() {
