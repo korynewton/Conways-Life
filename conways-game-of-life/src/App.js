@@ -12,7 +12,7 @@ class App extends React.Component {
     return (
       <div>
         <header>Conway's Game of Life</header>
-        <GridCanvas />
+        <GridCanvas width={540} height={540} cellHeight={20} cellWidth={20} />
         <h2>Generations: {this.state.generation}</h2>
       </div>
     );
