@@ -63,21 +63,46 @@ export default class GridCanvas extends Component {
       this.props.height
     );
 
-    const pixelRGBA = this.getPixel(imageData, 10, 10);
-    pixelRGBA[0] = 0;
-    pixelRGBA[1] = 0x00;
-    pixelRGBA[2] = 0x00;
-    pixelRGBA[3] = 0xff;
+    // const pixelRGBA = this.getPixel(imageData, 10, 10);
+    // pixelRGBA[0] = 0;
+    // pixelRGBA[1] = 0x00;
+    // pixelRGBA[2] = 0x00;
+    // pixelRGBA[3] = 0xff;
 
-    this.setPixel(imageData, pixelRGBA, 10, 10);
-    console.log('pixel data: ', pixelRGBA);
+    // this.setPixel(imageData, pixelRGBA, 10, 10);
 
-    console.log('x:', e.screenX);
-    console.log('y:', e.screenY);
+    let rect = canvas.getBoundingClientRect();
+    let clickX = e.clientX - rect.left;
+    let clickY = e.clientY - rect.top;
+    let cellTopX, cellTopY;
 
-    // ctx.moveTo(e.screenX, e.screenY);
-    // ctx.fill();
-    console.log('clickeroni');
+    for (let i = clickX; i >= 0; i--) {
+      if (i % this.props.cellWidth === 0) {
+        cellTopX = i;
+        break;
+      }
+    }
+    for (let i = clickY; i >= 0; i--) {
+      if (i % this.props.cellWidth === 0) {
+        cellTopY = i;
+        break;
+      }
+    }
+
+    console.log('click coords');
+    console.log(clickX);
+    console.log(clickY);
+    console.log('cell coords:');
+    console.log(cellTopX);
+    console.log(cellTopY);
+
+    //  fill cell with rectangle
+    ctx.fillRect(
+      cellTopX,
+      cellTopY,
+      this.props.cellWidth,
+      this.props.cellHeight
+    );
   }
 
   componentDidMount() {
