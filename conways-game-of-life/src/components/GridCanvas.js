@@ -23,33 +23,33 @@ export default class GridCanvas extends Component {
     return imageData.data.slice(index, index + 4);
   }
 
-  setPixel(imageData, edited, x, y) {
-    // find canvas element, save as variable
-    const canvas = this.refs.canvas;
-    // creating a drawing object for our canvas
-    const ctx = canvas.getContext('2d');
+  // setPixel(imageData, edited, x, y) {
+  //   // find canvas element, save as variable
+  //   const canvas = this.refs.canvas;
+  //   // creating a drawing object for our canvas
+  //   const ctx = canvas.getContext('2d');
 
-    const w = imageData.width; // Conveniently the width is here
-    const h = imageData.height;
+  //   const w = imageData.width; // Conveniently the width is here
+  //   const h = imageData.height;
 
-    if (x < 0 || x >= w || y < 0 || y >= h) {
-      // Out of bounds
-      return null;
-    }
+  //   if (x < 0 || x >= w || y < 0 || y >= h) {
+  //     // Out of bounds
+  //     return null;
+  //   }
 
-    // Compute index within the array
-    let index = (w * y + x) * 4;
+  //   // Compute index within the array
+  //   let index = (w * y + x) * 4;
 
-    for (let i = 0; i < 4; i++) {
-      imageData.data[index] = edited[i];
-      index++;
-    }
+  //   for (let i = 0; i < 4; i++) {
+  //     imageData.data[index] = edited[i];
+  //     index++;
+  //   }
 
-    ctx.putImageData(imageData, 0, 0);
+  //   ctx.putImageData(imageData, 0, 0);
 
-    // Return a copy of the R, G, B, and A elements
-    // return imageData.data.slice(index, index + 4);
-  }
+  //   // Return a copy of the R, G, B, and A elements
+  //   // return imageData.data.slice(index, index + 4);
+  // }
 
   handleClick(e) {
     // find canvas element, save as variable
@@ -88,6 +88,20 @@ export default class GridCanvas extends Component {
         break;
       }
     }
+
+    let pixelInfo = this.getPixel(imageData, clickX, clickY);
+
+    if (pixelInfo[3]) {
+      ctx.clearRect(
+        cellTopX + 1,
+        cellTopY + 1,
+        this.props.cellWidth - 1,
+        this.props.cellHeight - 1
+      );
+      console.log('here', pixelInfo[3]);
+    }
+
+    console.log(pixelInfo[3]);
 
     console.log('click coords');
     console.log(clickX);
