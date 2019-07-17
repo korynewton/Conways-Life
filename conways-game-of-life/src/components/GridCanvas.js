@@ -63,8 +63,58 @@ export default class GridCanvas extends Component {
   //   // return imageData.data.slice(index, index + 4);
   // }
 
-  stepToNextGen() {
-    console.log('here');
+  stepToNextGen(cells) {
+    this.setState({ generation: this.state.generation + 1 });
+
+    let newCells = [...this.state.cells];
+
+    for (let i = 0; i < this.numberCellsTall; i++) {
+      for (let j = 0; j < this.numberCellsWide; j++) {
+        console.log('row :', i, 'column: ', j);
+        let count = 0;
+        if (i !== 0) {
+          // only check top row if not the top row
+          if (j !== 0) {
+            // NorthWest -- only check if not top row or not at starting column
+            count += cells[i - 1][j - 1] ? 1 : 0;
+          }
+          count += cells[i - 1][j] ? 1 : 0;
+          if (j !== this.numberCellsWide - 1) {
+            count += cells[i - 1][j + 1] ? 1 : 0;
+          }
+        }
+
+        if (i < this.numberCellsTall - 1) {
+          // only check bottom row if not the bottom row
+          count += cells[i + 1][j - 1] ? 1 : 0;
+          count += cells[i + 1][j] ? 1 : 0;
+          count += cells[i + 1][j + 1] ? 1 : 0;
+        }
+
+        if (j < this.numberCellsWide - 1) {
+          // only check easterly neightbor if not on end
+          count += cells[i][j + 1] ? 1 : 0;
+        }
+
+        if (j !== 0) {
+          // only check westerly neightbor if not at begining
+          count += cells[i][j - 1] ? 1 : 0;
+        }
+
+        // decide if cell lives
+        if (cells[i][j] === 1 && (count < 2 || count > 3)) {
+          //cell dies
+          newCells[i][j] = 0;
+        }
+
+        if (cells[i][j] === 0 && count === 3) {
+          // reanimate from the dead
+          newCells[i][j] = 1;
+        }
+
+        console.log(count);
+      }
+    }
   }
 
   reset() {
@@ -81,7 +131,7 @@ export default class GridCanvas extends Component {
         cells[i][j] = 0;
       }
     }
-    this.setState({ cells });
+    this.setState({ cells, generation: 0 });
   }
 
   clearBoard() {
@@ -301,7 +351,9 @@ export default class GridCanvas extends Component {
         </div>
         <div style={{ position: 'absolute', left: 0, top: 560 }}>
           <h2>Generations: {this.state.generation}</h2>
-          <button onClick={() => this.stepToNextGen()}>Next Generation</button>
+          <button onClick={() => this.stepToNextGen(this.state.cells)}>
+            Next Generation
+          </button>
           <button onClick={() => this.reset()}>Clear Board</button>
         </div>
       </>
