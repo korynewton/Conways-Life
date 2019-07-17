@@ -65,21 +65,8 @@ export default class GridCanvas extends Component {
     const canvas = this.refs.canvas;
     // creating a drawing object for our canvas
     const ctx = canvas.getContext('2d');
-    const imageData = ctx.getImageData(
-      0,
-      0,
-      this.props.width,
-      this.props.height
-    );
 
-    // const pixelRGBA = this.getPixel(imageData, 10, 10);
-    // pixelRGBA[0] = 0;
-    // pixelRGBA[1] = 0x00;
-    // pixelRGBA[2] = 0x00;
-    // pixelRGBA[3] = 0xff;
-
-    // this.setPixel(imageData, pixelRGBA, 10, 10);
-
+    // Get click coords
     let rect = canvas.getBoundingClientRect();
     let clickX = e.clientX - rect.left;
     let clickY = e.clientY - rect.top;
@@ -98,35 +85,99 @@ export default class GridCanvas extends Component {
       }
     }
 
-    let pixelInfo = this.getPixel(imageData, clickX, clickY);
+    let column = cellTopX / this.props.cellWidth;
+    let row = cellTopY / this.props.cellHeight;
 
-    if (pixelInfo[3]) {
-      ctx.clearRect(
-        cellTopX + 1,
-        cellTopY + 1,
-        this.props.cellWidth - 1.5,
-        this.props.cellHeight - 1.5
+    let updatedState = this.state.cells;
+
+    if (updatedState[row][column] === 0) {
+      // Toggle on by filling in cell
+      ctx.fillRect(
+        cellTopX,
+        cellTopY,
+        this.props.cellWidth,
+        this.props.cellHeight
       );
-      console.log('here', pixelInfo[3]);
+      // Toggle off by clearing cell
+      // else {
+
+      // }
     }
 
-    console.log(pixelInfo[3]);
-
-    console.log('click coords');
-    console.log(clickX);
-    console.log(clickY);
-    console.log('cell coords:');
-    console.log(cellTopX);
-    console.log(cellTopY);
-
-    //  fill cell with rectangle
-    ctx.fillRect(
-      cellTopX,
-      cellTopY,
-      this.props.cellWidth,
-      this.props.cellHeight
-    );
+    // update state
+    updatedState[row][column]
+      ? (updatedState[row][column] = 0)
+      : (updatedState[row][column] = 1);
+    this.setState({ cells: updatedState });
   }
+
+  // handleClick(e) {
+  // // find canvas element, save as variable
+  // const canvas = this.refs.canvas;
+  // // creating a drawing object for our canvas
+  // const ctx = canvas.getContext('2d');
+  //   const imageData = ctx.getImageData(
+  //     0,
+  //     0,
+  //     this.props.width,
+  //     this.props.height
+  //   );
+
+  //   // const pixelRGBA = this.getPixel(imageData, 10, 10);
+  //   // pixelRGBA[0] = 0;
+  //   // pixelRGBA[1] = 0x00;
+  //   // pixelRGBA[2] = 0x00;
+  //   // pixelRGBA[3] = 0xff;
+
+  //   // this.setPixel(imageData, pixelRGBA, 10, 10);
+
+  // let rect = canvas.getBoundingClientRect();
+  // let clickX = e.clientX - rect.left;
+  // let clickY = e.clientY - rect.top;
+  // let cellTopX, cellTopY;
+
+  // for (let i = clickX; i >= 0; i--) {
+  //   if (i % this.props.cellWidth === 0) {
+  //     cellTopX = i;
+  //     break;
+  //   }
+  // }
+  // for (let i = clickY; i >= 0; i--) {
+  //   if (i % this.props.cellWidth === 0) {
+  //     cellTopY = i;
+  //     break;
+  //   }
+  // }
+
+  //   let pixelInfo = this.getPixel(imageData, clickX, clickY);
+
+  //   if (pixelInfo[3]) {
+  //     ctx.clearRect(
+  //       cellTopX + 1,
+  //       cellTopY + 1,
+  //       this.props.cellWidth - 1.5,
+  //       this.props.cellHeight - 1.5
+  //     );
+  //     console.log('here', pixelInfo[3]);
+  //   }
+
+  //   console.log(pixelInfo[3]);
+
+  //   console.log('click coords');
+  //   console.log(clickX);
+  //   console.log(clickY);
+  //   console.log('cell coords:');
+  //   console.log(cellTopX);
+  //   console.log(cellTopY);
+
+  //   //  fill cell with rectangle
+  //   ctx.fillRect(
+  //     cellTopX,
+  //     cellTopY,
+  //     this.props.cellWidth,
+  //     this.props.cellHeight
+  //   );
+  // }
 
   componentDidMount() {
     // destructuring props
@@ -139,6 +190,7 @@ export default class GridCanvas extends Component {
     // creating a drawing object for our canvas
     const ctx = canvas.getContext('2d');
 
+    // draws grid:
     // draw outer rectangle and begin tracing path of grid
     ctx.clearRect(0, 0, width, height);
     ctx.translate(0.5, 0.5);
@@ -170,13 +222,10 @@ export default class GridCanvas extends Component {
   //   ctx.fillRect(0, 0, 10, 10);
   // }
 
-  componentWillUnmount() {}
-
   render() {
     return (
       <div>
         <canvas
-          // className="grid"
           ref="canvas"
           width={this.props.width + 1}
           height={this.props.height + 1}
