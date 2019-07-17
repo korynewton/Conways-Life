@@ -13,7 +13,10 @@ export default class GridCanvas extends Component {
         cells[i][j] = 0;
       }
     }
-    this.state = { cells };
+    this.state = {
+      cells,
+      generation: 0
+    };
   }
 
   getPixel(imageData, x, y) {
@@ -60,6 +63,58 @@ export default class GridCanvas extends Component {
   //   // return imageData.data.slice(index, index + 4);
   // }
 
+  stepToNextGen() {
+    console.log('here');
+  }
+
+  reset() {
+    // find canvas element, save as variable
+    const canvas = this.refs.canvas;
+    // creating a drawing object for our canvas
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, this.props.width, this.props.height);
+
+    let cells = new Array(this.numberCellsTall);
+    for (let i = 0; i < this.numberCellsTall; i++) {
+      cells[i] = new Array(this.numberCellsWide);
+      for (let j = 0; j < this.numberCellsWide; j++) {
+        cells[i][j] = 0;
+      }
+    }
+    this.setState({ cells });
+  }
+
+  clearBoard() {
+    // find canvas element, save as variable
+    const canvas = this.refs.canvas;
+    // creating a drawing object for our canvas
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, this.props.width, this.props.height);
+  }
+
+  redraw() {
+    // first clear board
+    this.clearBoard();
+    // redraw based on state
+    // find canvas element, save as variable
+    const canvas = this.refs.canvas;
+    // creating a drawing object for our canvas
+    const ctx = canvas.getContext('2d');
+
+    for (let i = 0; i < this.numberCellsTall; i++) {
+      for (let j = 0; j < this.numberCellsWide; j++) {
+        if (this.state.cells[i][j] === 1) {
+          ctx.fillRect(
+            j * 20,
+            i * 20,
+            this.props.cellWidth,
+            this.props.cellHeight
+          );
+        }
+      }
+    }
+  }
+
   handleClick(e) {
     // find canvas element, save as variable
     const canvas = this.refs.canvas;
@@ -88,6 +143,7 @@ export default class GridCanvas extends Component {
     let column = cellTopX / this.props.cellWidth;
     let row = cellTopY / this.props.cellHeight;
 
+    // make copy of current state of cells
     let updatedState = this.state.cells;
 
     if (updatedState[row][column] === 0) {
@@ -98,18 +154,21 @@ export default class GridCanvas extends Component {
         this.props.cellWidth,
         this.props.cellHeight
       );
-      // Toggle off by clearing cell
-      // else {
-
-      // }
+      updatedState[row][column] = 1;
+      this.setState({ cells: updatedState });
+    } else {
+      let stateCopy = [...this.state.cells];
+      stateCopy[row][column] = 0;
+      this.setState({ cells: stateCopy });
+      // redraw
+      this.redraw(row, column);
     }
-
-    // update state
-    updatedState[row][column]
-      ? (updatedState[row][column] = 0)
-      : (updatedState[row][column] = 1);
-    this.setState({ cells: updatedState });
   }
+  // // update state
+  // updatedState[row][column]
+  //   ? (updatedState[row][column] = 0)
+  //   : (updatedState[row][column] = 1);
+  // this.setState({ cells: updatedState });
 
   // handleClick(e) {
   // // find canvas element, save as variable
@@ -224,21 +283,28 @@ export default class GridCanvas extends Component {
 
   render() {
     return (
-      <div style={{ position: 'relative' }}>
-        <canvas
-          style={{ position: 'absolute', left: 0, top: 0, zIndex: 1 }}
-          ref="canvas"
-          width={this.props.width + 1}
-          height={this.props.height + 1}
-          onClick={e => this.handleClick(e)}
-        />
-        <canvas
-          style={{ position: 'absolute', left: 0, top: 0, zIndex: 0 }}
-          ref="grid"
-          width={this.props.width + 1}
-          height={this.props.height + 1}
-        />
-      </div>
+      <>
+        <div style={{ position: 'relative' }}>
+          <canvas
+            style={{ position: 'absolute', left: 0, top: 0, zIndex: 1 }}
+            ref="canvas"
+            width={this.props.width + 1}
+            height={this.props.height + 1}
+            onClick={e => this.handleClick(e)}
+          />
+          <canvas
+            style={{ position: 'absolute', left: 0, top: 0, zIndex: 0 }}
+            ref="grid"
+            width={this.props.width + 1}
+            height={this.props.height + 1}
+          />
+        </div>
+        <div style={{ position: 'absolute', left: 0, top: 560 }}>
+          <h2>Generations: {this.state.generation}</h2>
+          <button onClick={() => this.stepToNextGen()}>Next Generation</button>
+          <button onClick={() => this.reset()}>Clear Board</button>
+        </div>
+      </>
     );
   }
 }
