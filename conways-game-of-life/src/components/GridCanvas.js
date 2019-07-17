@@ -186,7 +186,7 @@ export default class GridCanvas extends Component {
     // this.requestAnimationFrame();
 
     // find canvas element, save as variable
-    const canvas = this.refs.canvas;
+    const canvas = this.refs.grid;
     // creating a drawing object for our canvas
     const ctx = canvas.getContext('2d');
 
@@ -224,12 +224,19 @@ export default class GridCanvas extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ position: 'relative' }}>
         <canvas
+          style={{ position: 'absolute', left: 0, top: 0, zIndex: 1 }}
           ref="canvas"
           width={this.props.width + 1}
           height={this.props.height + 1}
           onClick={e => this.handleClick(e)}
+        />
+        <canvas
+          style={{ position: 'absolute', left: 0, top: 0, zIndex: 0 }}
+          ref="grid"
+          width={this.props.width + 1}
+          height={this.props.height + 1}
         />
       </div>
     );
