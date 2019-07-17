@@ -2,9 +2,18 @@ import React, { Component } from 'react';
 import './styles.css';
 
 export default class GridCanvas extends Component {
-  constructor() {
-    super();
-    this.state = {};
+  constructor(props) {
+    super(props);
+    this.numberCellsWide = this.props.width / this.props.cellWidth;
+    this.numberCellsTall = this.props.height / this.props.cellHeight;
+    let cells = new Array(this.numberCellsTall);
+    for (let i = 0; i < this.numberCellsTall; i++) {
+      cells[i] = new Array(this.numberCellsWide);
+      for (let j = 0; j < this.numberCellsWide; j++) {
+        cells[i][j] = 0;
+      }
+    }
+    this.state = { cells };
   }
 
   getPixel(imageData, x, y) {
@@ -95,8 +104,8 @@ export default class GridCanvas extends Component {
       ctx.clearRect(
         cellTopX + 1,
         cellTopY + 1,
-        this.props.cellWidth - 1,
-        this.props.cellHeight - 1
+        this.props.cellWidth - 1.5,
+        this.props.cellHeight - 1.5
       );
       console.log('here', pixelInfo[3]);
     }
@@ -169,8 +178,8 @@ export default class GridCanvas extends Component {
         <canvas
           // className="grid"
           ref="canvas"
-          width={this.props.width + 2}
-          height={this.props.height + 2}
+          width={this.props.width + 1}
+          height={this.props.height + 1}
           onClick={e => this.handleClick(e)}
         />
       </div>
