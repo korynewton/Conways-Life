@@ -355,41 +355,43 @@ export default class GridCanvas extends Component {
       <>
         <div style={{ position: 'relative' }}>
           <canvas
-            style={{ position: 'absolute', left: 0, top: 0, zIndex: 1 }}
+            style={{ zIndex: 1 }}
             ref="canvas"
+            className="canvas"
             width={this.props.width + 1}
             height={this.props.height + 1}
             onClick={e => this.handleClick(e)}
           />
           <canvas
-            style={{ position: 'absolute', left: 0, top: 0, zIndex: 0 }}
+            style={{ Index: 0 }}
+            className="canvas"
             ref="grid"
             width={this.props.width + 1}
             height={this.props.height + 1}
           />
         </div>
-        <div style={{ position: 'absolute', left: 0, top: 560 }}>
+        <div className="controls">
           <h2>Generations: {this.state.generation}</h2>
           <button onClick={() => this.stepToNextGen()}>Next Generation</button>
           <button onClick={() => this.reset()}>Clear Board</button>
           <button onClick={() => this.randomize()}>Randomize</button>
           <button onClick={() => this.runLife()}>Play</button>
           <button onClick={() => this.pause()}>Pause</button>
-          <div>
-            <h3>Presets:</h3>
-            <button name="glider" onClick={e => this.presetObjects(e)}>
-              Glider
-            </button>
-            <button name="blinker" onClick={e => this.presetObjects(e)}>
-              Blinker
-            </button>
-            <button name="unsure" onClick={e => this.presetObjects(e)}>
-              Not Sure What This Is
-            </button>
-            <button name="otherblinker" onClick={e => this.presetObjects(e)}>
-              Another Blinker
-            </button>
-          </div>
+        </div>
+        <div className="presets">
+          <h3>Presets:</h3>
+          <button name="glider" onClick={e => this.presetObjects(e)}>
+            Glider
+          </button>
+          <button name="blinker" onClick={e => this.presetObjects(e)}>
+            Blinker
+          </button>
+          <button name="unsure" onClick={e => this.presetObjects(e)}>
+            Not Sure What This Is
+          </button>
+          <button name="otherblinker" onClick={e => this.presetObjects(e)}>
+            Another Blinker
+          </button>
         </div>
       </>
     );
