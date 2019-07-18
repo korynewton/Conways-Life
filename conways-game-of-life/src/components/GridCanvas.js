@@ -15,7 +15,8 @@ export default class GridCanvas extends Component {
     }
     this.state = {
       cells,
-      generation: 0
+      generation: 0,
+      isRunning: false
     };
   }
 
@@ -63,6 +64,20 @@ export default class GridCanvas extends Component {
   //   // return imageData.data.slice(index, index + 4);
   // }
 
+  toggleRunning() {
+    console.log(this.state.isRunning);
+    this.setState({ isRunning: !this.state.isRunning }, function() {
+      this.runLife(this.state.isRunning);
+    });
+  }
+
+  runLife = status => {
+    console.log(status);
+    if (status === true) {
+      setInterval(() => this.stepToNextGen(), 200);
+    }
+  };
+
   randomize() {
     // first off, clear the board
     this.clearBoard();
@@ -76,6 +91,8 @@ export default class GridCanvas extends Component {
       }
       randomized.push(row);
     }
+
+    console.log(randomized);
     // redraw
     this.redraw(randomized);
   }
@@ -83,23 +100,9 @@ export default class GridCanvas extends Component {
   stepToNextGen() {
     this.setState({ generation: this.state.generation + 1 });
 
-    // console.log('0 1 before', cells[0][1]);
-
-    // console.log(cells[0][1]);
-
-    // let cells = [...this.state.cells];
     let cells = arrayClone(this.state.cells);
 
     let newCells = arrayClone(cells);
-
-    console.log(cells);
-    console.log(newCells);
-
-    // console.log(cells[0] === newCells[0]);
-    // console.log(cells[0][0], newCells[0][0]);
-
-    // newCells[0][0] = 12;
-    // console.log(cells[0][0], newCells[0][0]);
 
     for (let i = 0; i < this.numberCellsTall; i++) {
       for (let j = 0; j < this.numberCellsWide; j++) {
@@ -158,26 +161,16 @@ export default class GridCanvas extends Component {
           // reanimate from the dead
           newCells[i][j] = 1;
         }
-        // const after = cells[i][j];
-        // if (before !== after) {
-        //   console.log('before :', before);
-        //   console.log('after :', after);
-        //   console.log('row, col ', i, j);
-        // }
       }
     }
-    // console.log('0 1 old', cells[0][1]);
-    // console.log(newCells[1][1]);
+
     this.setState({ cells: newCells });
     this.redraw(newCells);
   }
 
+  // clears board, reinitializes cells to 0
   reset() {
-    // find canvas element, save as variable
-    const canvas = this.refs.canvas;
-    // creating a drawing object for our canvas
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, this.props.width, this.props.height);
+    this.clearBoard();
 
     let cells = new Array(this.numberCellsTall);
     for (let i = 0; i < this.numberCellsTall; i++) {
@@ -215,6 +208,7 @@ export default class GridCanvas extends Component {
             this.props.cellWidth,
             this.props.cellHeight
           );
+          ctx.stroke();
         }
       }
     }
@@ -409,8 +403,8 @@ export default class GridCanvas extends Component {
           <button onClick={() => this.stepToNextGen()}>Next Generation</button>
           <button onClick={() => this.reset()}>Clear Board</button>
           <button onClick={() => this.randomize()}>Randomize</button>
-          <button>Run</button>
-          <button>Stop</button>
+          <button onClick={() => this.toggleRunning()}>Run</button>
+          {/* <button onClick={() => this.toggleRunning()}>Stop</button> */}
           <div>
             <h3>Presets:</h3>
             <button>Glider</button>
