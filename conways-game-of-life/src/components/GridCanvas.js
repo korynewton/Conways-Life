@@ -212,6 +212,32 @@ export default class GridCanvas extends Component {
     }
   }
 
+  presetObjects = e => {
+    let { name } = e.target;
+
+    let cells;
+
+    if (name === 'glider') {
+      cells = new Array(this.numberCellsTall);
+      for (let i = 0; i < this.numberCellsTall; i++) {
+        cells[i] = new Array(this.numberCellsWide);
+        for (let j = 0; j < this.numberCellsWide; j++) {
+          if (i === 1 && j === 2) {
+            cells[i][j] = 1;
+          } else if (i === 2 && j === 3) {
+            cells[i][j] = 1;
+          } else if (i === 3 && (j === 1 || j === 2 || j === 3)) {
+            cells[i][j] = 1;
+          } else {
+            cells[i][j] = 0;
+          }
+        }
+      }
+    }
+    this.setState({ cells });
+    this.redraw(cells);
+  };
+
   handleClick(e) {
     // find canvas element, save as variable
     const canvas = this.refs.canvas;
@@ -332,8 +358,10 @@ export default class GridCanvas extends Component {
           <button onClick={() => this.pause()}>Pause</button>
           <div>
             <h3>Presets:</h3>
-            <button>Glider</button>
-            <button>Pulsar</button>
+            <button name="glider" onClick={e => this.presetObjects(e)}>
+              Glider
+            </button>
+            <button name="pulsar">Pulsar</button>
           </div>
         </div>
       </>
