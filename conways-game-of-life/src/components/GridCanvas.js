@@ -35,41 +35,6 @@ export default class GridCanvas extends Component {
     return imageData.data.slice(index, index + 4);
   }
 
-  // setPixel(imageData, edited, x, y) {
-  //   // find canvas element, save as variable
-  //   const canvas = this.refs.canvas;
-  //   // creating a drawing object for our canvas
-  //   const ctx = canvas.getContext('2d');
-
-  //   const w = imageData.width; // Conveniently the width is here
-  //   const h = imageData.height;
-
-  //   if (x < 0 || x >= w || y < 0 || y >= h) {
-  //     // Out of bounds
-  //     return null;
-  //   }
-
-  //   // Compute index within the array
-  //   let index = (w * y + x) * 4;
-
-  //   for (let i = 0; i < 4; i++) {
-  //     imageData.data[index] = edited[i];
-  //     index++;
-  //   }
-
-  //   ctx.putImageData(imageData, 0, 0);
-
-  //   // Return a copy of the R, G, B, and A elements
-  //   // return imageData.data.slice(index, index + 4);
-  // }
-
-  // toggleRunning() {
-  //   console.log(this.state.isRunning);
-  //   this.setState({ isRunning: !this.state.isRunning }, function() {
-  //     this.runLife(this.state.isRunning);
-  //   });
-  // }
-
   runLife = () => {
     this.intervalId = setInterval(() => this.stepToNextGen(), 200);
   };
@@ -81,14 +46,6 @@ export default class GridCanvas extends Component {
   randomize() {
     // first off, clear the board
     this.clearBoard();
-
-    // let randomized = new Array(this.numberCellsTall);
-    // for (let i = 0; i < this.numberCellsTall; i++) {
-    //   randomized[i] = new Array(this.numberCellsWide);
-    //   for (let j = 0; j < this.numberCellsWide; j++) {
-    //     randomized[i][j] = Math.floor(Math.random() * 2);
-    //   }
-    // }
 
     let randomized = [];
     // generate values 0 or 1 for each cell
@@ -392,13 +349,6 @@ export default class GridCanvas extends Component {
 
     ctx.stroke();
   }
-
-  // onAnimFrame(timestamp) {}
-
-  // requestAnimationFrame() {
-  //   const ctx = this.refs.canvas.getContext('2d');
-  //   ctx.fillRect(0, 0, 10, 10);
-  // }
 
   render() {
     return (
