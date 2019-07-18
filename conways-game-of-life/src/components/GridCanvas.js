@@ -63,6 +63,23 @@ export default class GridCanvas extends Component {
   //   // return imageData.data.slice(index, index + 4);
   // }
 
+  randomize() {
+    // first off, clear the board
+    this.clearBoard();
+
+    let randomized = [];
+    // generate values 0 or 1 for each cell
+    for (let i = 0; i < this.numberCellsTall; i++) {
+      let row = [];
+      for (let j = 0; j < this.numberCellsWide; j++) {
+        row.push(Math.floor(Math.random() * 2));
+      }
+      randomized.push(row);
+    }
+    // redraw
+    this.redraw(randomized);
+  }
+
   stepToNextGen() {
     this.setState({ generation: this.state.generation + 1 });
 
@@ -391,7 +408,7 @@ export default class GridCanvas extends Component {
           <h2>Generations: {this.state.generation}</h2>
           <button onClick={() => this.stepToNextGen()}>Next Generation</button>
           <button onClick={() => this.reset()}>Clear Board</button>
-          <button>Randomize</button>
+          <button onClick={() => this.randomize()}>Randomize</button>
           <button>Run</button>
           <button>Stop</button>
           <div>
