@@ -234,6 +234,65 @@ export default class GridCanvas extends Component {
         }
       }
     }
+
+    if (name === 'blinker') {
+      cells = new Array(this.numberCellsTall);
+      for (let i = 0; i < this.numberCellsTall; i++) {
+        cells[i] = new Array(this.numberCellsWide);
+        for (let j = 0; j < this.numberCellsWide; j++) {
+          if (i === 4 && j === 4) {
+            cells[i][j] = 1;
+          } else if (i === 5 && j === 4) {
+            cells[i][j] = 1;
+          } else if (i === 6 && j === 4) {
+            cells[i][j] = 1;
+          } else {
+            cells[i][j] = 0;
+          }
+        }
+      }
+    }
+
+    if (name === 'unsure') {
+      cells = new Array(this.numberCellsTall);
+      for (let i = 0; i < this.numberCellsTall; i++) {
+        cells[i] = new Array(this.numberCellsWide);
+        for (let j = 0; j < this.numberCellsWide; j++) {
+          if (i === 12 && j === 12) {
+            cells[i][j] = 1;
+          } else if (i === 13 && j === 12) {
+            cells[i][j] = 1;
+          } else if (i === 14 && j === 12) {
+            cells[i][j] = 1;
+          } else if ((i === 13 && j === 11) || j === 13) {
+            cells[i][j] = 1;
+          } else {
+            cells[i][j] = 0;
+          }
+        }
+      }
+    }
+
+    if (name === 'otherblinker') {
+      cells = new Array(this.numberCellsTall);
+      for (let i = 0; i < this.numberCellsTall; i++) {
+        cells[i] = new Array(this.numberCellsWide);
+        for (let j = 0; j < this.numberCellsWide; j++) {
+          if (i === 12 && j === 12) {
+            cells[i][j] = 1;
+          } else if (i === 13 && j === 12) {
+            cells[i][j] = 1;
+          } else if (i === 14 && j === 12) {
+            cells[i][j] = 1;
+          } else if (i === 13 && (j === 11 || j === 13)) {
+            cells[i][j] = 1;
+          } else {
+            cells[i][j] = 0;
+          }
+        }
+      }
+    }
+
     this.setState({ cells });
     this.redraw(cells);
   };
@@ -361,7 +420,15 @@ export default class GridCanvas extends Component {
             <button name="glider" onClick={e => this.presetObjects(e)}>
               Glider
             </button>
-            <button name="pulsar">Pulsar</button>
+            <button name="blinker" onClick={e => this.presetObjects(e)}>
+              Blinker
+            </button>
+            <button name="unsure" onClick={e => this.presetObjects(e)}>
+              Not Sure What This Is
+            </button>
+            <button name="otherblinker" onClick={e => this.presetObjects(e)}>
+              Another Blinker
+            </button>
           </div>
         </div>
       </>
