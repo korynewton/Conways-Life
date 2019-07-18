@@ -82,6 +82,14 @@ export default class GridCanvas extends Component {
     // first off, clear the board
     this.clearBoard();
 
+    // let randomized = new Array(this.numberCellsTall);
+    // for (let i = 0; i < this.numberCellsTall; i++) {
+    //   randomized[i] = new Array(this.numberCellsWide);
+    //   for (let j = 0; j < this.numberCellsWide; j++) {
+    //     randomized[i][j] = Math.floor(Math.random() * 2);
+    //   }
+    // }
+
     let randomized = [];
     // generate values 0 or 1 for each cell
     for (let i = 0; i < this.numberCellsTall; i++) {
@@ -91,6 +99,8 @@ export default class GridCanvas extends Component {
       }
       randomized.push(row);
     }
+
+    this.setState({ cells: randomized });
     // redraw
     this.redraw(randomized);
   }
