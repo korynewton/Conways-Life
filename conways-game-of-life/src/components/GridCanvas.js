@@ -63,22 +63,43 @@ export default class GridCanvas extends Component {
   //   // return imageData.data.slice(index, index + 4);
   // }
 
-  stepToNextGen(cells) {
+  stepToNextGen() {
     this.setState({ generation: this.state.generation + 1 });
 
-    let newCells = [...this.state.cells];
+    // console.log('0 1 before', cells[0][1]);
+
+    // console.log(cells[0][1]);
+
+    // let cells = [...this.state.cells];
+    let cells = arrayClone(this.state.cells);
+
+    let newCells = arrayClone(cells);
+
+    console.log(cells);
+    console.log(newCells);
+
+    // console.log(cells[0] === newCells[0]);
+    // console.log(cells[0][0], newCells[0][0]);
+
+    // newCells[0][0] = 12;
+    // console.log(cells[0][0], newCells[0][0]);
 
     for (let i = 0; i < this.numberCellsTall; i++) {
       for (let j = 0; j < this.numberCellsWide; j++) {
-        console.log('row :', i, 'column: ', j);
+        // const before = cells[i][j];
         let count = 0;
+
         if (i !== 0) {
           // only check top row if not the top row
           if (j !== 0) {
             // NorthWest -- only check if not top row or not at starting column
             count += cells[i - 1][j - 1] ? 1 : 0;
           }
+
+          // every cell that isnt the top row will have a North
           count += cells[i - 1][j] ? 1 : 0;
+
+          // Check Northeast only if not the last column
           if (j !== this.numberCellsWide - 1) {
             count += cells[i - 1][j + 1] ? 1 : 0;
           }
@@ -86,9 +107,18 @@ export default class GridCanvas extends Component {
 
         if (i < this.numberCellsTall - 1) {
           // only check bottom row if not the bottom row
-          count += cells[i + 1][j - 1] ? 1 : 0;
+          if (j !== 0) {
+            //SW -  only check if also not in first column
+            count += cells[i + 1][j - 1] ? 1 : 0;
+          }
+
+          // S - all rows that are not the bottom will have a S
           count += cells[i + 1][j] ? 1 : 0;
-          count += cells[i + 1][j + 1] ? 1 : 0;
+
+          if (j !== this.numberCellsWide - 1) {
+            // SE - only check if also not in last column
+            count += cells[i + 1][j + 1] ? 1 : 0;
+          }
         }
 
         if (j < this.numberCellsWide - 1) {
@@ -111,10 +141,19 @@ export default class GridCanvas extends Component {
           // reanimate from the dead
           newCells[i][j] = 1;
         }
-
-        console.log(count);
+        // const after = cells[i][j];
+        // if (before !== after) {
+        //   console.log('before :', before);
+        //   console.log('after :', after);
+        //   console.log('row, col ', i, j);
+        // }
       }
     }
+    // console.log('0 1 old', cells[0][1]);
+    // console.log(newCells[1][1]);
+
+    this.setState({ cells: newCells });
+    this.redraw();
   }
 
   reset() {
@@ -143,6 +182,7 @@ export default class GridCanvas extends Component {
   }
 
   redraw() {
+    console.log('redrawing');
     // first clear board
     this.clearBoard();
     // redraw based on state
@@ -211,7 +251,7 @@ export default class GridCanvas extends Component {
       stateCopy[row][column] = 0;
       this.setState({ cells: stateCopy });
       // redraw
-      this.redraw(row, column);
+      this.redraw();
     }
   }
   // // update state
@@ -351,12 +391,14 @@ export default class GridCanvas extends Component {
         </div>
         <div style={{ position: 'absolute', left: 0, top: 560 }}>
           <h2>Generations: {this.state.generation}</h2>
-          <button onClick={() => this.stepToNextGen(this.state.cells)}>
-            Next Generation
-          </button>
+          <button onClick={() => this.stepToNextGen()}>Next Generation</button>
           <button onClick={() => this.reset()}>Clear Board</button>
         </div>
       </>
     );
   }
+}
+
+function arrayClone(arr) {
+  return JSON.parse(JSON.stringify(arr));
 }
