@@ -151,9 +151,8 @@ export default class GridCanvas extends Component {
     }
     // console.log('0 1 old', cells[0][1]);
     // console.log(newCells[1][1]);
-
     this.setState({ cells: newCells });
-    this.redraw();
+    this.redraw(newCells);
   }
 
   reset() {
@@ -181,8 +180,7 @@ export default class GridCanvas extends Component {
     ctx.clearRect(0, 0, this.props.width, this.props.height);
   }
 
-  redraw() {
-    console.log('redrawing');
+  redraw(cells) {
     // first clear board
     this.clearBoard();
     // redraw based on state
@@ -193,7 +191,7 @@ export default class GridCanvas extends Component {
 
     for (let i = 0; i < this.numberCellsTall; i++) {
       for (let j = 0; j < this.numberCellsWide; j++) {
-        if (this.state.cells[i][j] === 1) {
+        if (cells[i][j] === 1) {
           ctx.fillRect(
             j * 20,
             i * 20,
@@ -251,7 +249,7 @@ export default class GridCanvas extends Component {
       stateCopy[row][column] = 0;
       this.setState({ cells: stateCopy });
       // redraw
-      this.redraw();
+      this.redraw(stateCopy);
     }
   }
   // // update state
@@ -393,6 +391,14 @@ export default class GridCanvas extends Component {
           <h2>Generations: {this.state.generation}</h2>
           <button onClick={() => this.stepToNextGen()}>Next Generation</button>
           <button onClick={() => this.reset()}>Clear Board</button>
+          <button>Randomize</button>
+          <button>Run</button>
+          <button>Stop</button>
+          <div>
+            <h3>Presets:</h3>
+            <button>Glider</button>
+            <button>Pulsar</button>
+          </div>
         </div>
       </>
     );
