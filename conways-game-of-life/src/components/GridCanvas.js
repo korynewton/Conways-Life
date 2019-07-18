@@ -15,8 +15,7 @@ export default class GridCanvas extends Component {
     }
     this.state = {
       cells,
-      generation: 0,
-      isRunning: false
+      generation: 0
     };
   }
 
@@ -64,18 +63,19 @@ export default class GridCanvas extends Component {
   //   // return imageData.data.slice(index, index + 4);
   // }
 
-  toggleRunning() {
-    console.log(this.state.isRunning);
-    this.setState({ isRunning: !this.state.isRunning }, function() {
-      this.runLife(this.state.isRunning);
-    });
-  }
+  // toggleRunning() {
+  //   console.log(this.state.isRunning);
+  //   this.setState({ isRunning: !this.state.isRunning }, function() {
+  //     this.runLife(this.state.isRunning);
+  //   });
+  // }
 
-  runLife = status => {
-    console.log(status);
-    if (status === true) {
-      setInterval(() => this.stepToNextGen(), 200);
-    }
+  runLife = () => {
+    this.intervalId = setInterval(() => this.stepToNextGen(), 200);
+  };
+
+  pause = () => {
+    clearInterval(this.intervalId);
   };
 
   randomize() {
@@ -91,8 +91,6 @@ export default class GridCanvas extends Component {
       }
       randomized.push(row);
     }
-
-    console.log(randomized);
     // redraw
     this.redraw(randomized);
   }
@@ -263,79 +261,6 @@ export default class GridCanvas extends Component {
       this.redraw(stateCopy);
     }
   }
-  // // update state
-  // updatedState[row][column]
-  //   ? (updatedState[row][column] = 0)
-  //   : (updatedState[row][column] = 1);
-  // this.setState({ cells: updatedState });
-
-  // handleClick(e) {
-  // // find canvas element, save as variable
-  // const canvas = this.refs.canvas;
-  // // creating a drawing object for our canvas
-  // const ctx = canvas.getContext('2d');
-  //   const imageData = ctx.getImageData(
-  //     0,
-  //     0,
-  //     this.props.width,
-  //     this.props.height
-  //   );
-
-  //   // const pixelRGBA = this.getPixel(imageData, 10, 10);
-  //   // pixelRGBA[0] = 0;
-  //   // pixelRGBA[1] = 0x00;
-  //   // pixelRGBA[2] = 0x00;
-  //   // pixelRGBA[3] = 0xff;
-
-  //   // this.setPixel(imageData, pixelRGBA, 10, 10);
-
-  // let rect = canvas.getBoundingClientRect();
-  // let clickX = e.clientX - rect.left;
-  // let clickY = e.clientY - rect.top;
-  // let cellTopX, cellTopY;
-
-  // for (let i = clickX; i >= 0; i--) {
-  //   if (i % this.props.cellWidth === 0) {
-  //     cellTopX = i;
-  //     break;
-  //   }
-  // }
-  // for (let i = clickY; i >= 0; i--) {
-  //   if (i % this.props.cellWidth === 0) {
-  //     cellTopY = i;
-  //     break;
-  //   }
-  // }
-
-  //   let pixelInfo = this.getPixel(imageData, clickX, clickY);
-
-  //   if (pixelInfo[3]) {
-  //     ctx.clearRect(
-  //       cellTopX + 1,
-  //       cellTopY + 1,
-  //       this.props.cellWidth - 1.5,
-  //       this.props.cellHeight - 1.5
-  //     );
-  //     console.log('here', pixelInfo[3]);
-  //   }
-
-  //   console.log(pixelInfo[3]);
-
-  //   console.log('click coords');
-  //   console.log(clickX);
-  //   console.log(clickY);
-  //   console.log('cell coords:');
-  //   console.log(cellTopX);
-  //   console.log(cellTopY);
-
-  //   //  fill cell with rectangle
-  //   ctx.fillRect(
-  //     cellTopX,
-  //     cellTopY,
-  //     this.props.cellWidth,
-  //     this.props.cellHeight
-  //   );
-  // }
 
   componentDidMount() {
     // destructuring props
@@ -403,8 +328,8 @@ export default class GridCanvas extends Component {
           <button onClick={() => this.stepToNextGen()}>Next Generation</button>
           <button onClick={() => this.reset()}>Clear Board</button>
           <button onClick={() => this.randomize()}>Randomize</button>
-          <button onClick={() => this.toggleRunning()}>Run</button>
-          {/* <button onClick={() => this.toggleRunning()}>Stop</button> */}
+          <button onClick={() => this.runLife()}>Play</button>
+          <button onClick={() => this.pause()}>Pause</button>
           <div>
             <h3>Presets:</h3>
             <button>Glider</button>
