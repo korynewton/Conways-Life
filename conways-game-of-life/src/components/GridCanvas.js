@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Rules from './Rules';
 import './styles.css';
 
 export default class GridCanvas extends Component {
@@ -272,8 +273,8 @@ export default class GridCanvas extends Component {
 
     // Get click coords
     let rect = canvas.getBoundingClientRect();
-    let clickX = e.clientX - rect.left;
-    let clickY = e.clientY - rect.top;
+    let clickX = Math.floor(e.clientX - rect.left);
+    let clickY = Math.floor(e.clientY - rect.top);
     let cellTopX, cellTopY;
 
     for (let i = clickX; i >= 0; i--) {
@@ -353,46 +354,49 @@ export default class GridCanvas extends Component {
   render() {
     return (
       <>
-        <div style={{ position: 'relative' }}>
+        <div className="canvasDiv">
           <canvas
-            style={{ zIndex: 1 }}
             ref="canvas"
-            className="canvas"
+            className="canvas cells"
             width={this.props.width + 1}
             height={this.props.height + 1}
             onClick={e => this.handleClick(e)}
           />
           <canvas
-            style={{ Index: 0 }}
-            className="canvas"
+            className="canvas grid"
             ref="grid"
             width={this.props.width + 1}
             height={this.props.height + 1}
           />
         </div>
-        <div className="controls">
-          <h2>Generations: {this.state.generation}</h2>
-          <button onClick={() => this.stepToNextGen()}>Next Generation</button>
-          <button onClick={() => this.reset()}>Clear Board</button>
-          <button onClick={() => this.randomize()}>Randomize</button>
-          <button onClick={() => this.runLife()}>Play</button>
-          <button onClick={() => this.pause()}>Pause</button>
+        <div className="leftPannel">
+          <div className="controls">
+            <h3>Generations: {this.state.generation}</h3>
+            <button onClick={() => this.stepToNextGen()}>
+              Next Generation
+            </button>
+            <button onClick={() => this.reset()}>Clear Board</button>
+            <button onClick={() => this.randomize()}>Randomize</button>
+            <button onClick={() => this.runLife()}>Play</button>
+            <button onClick={() => this.pause()}>Pause</button>
+          </div>
+          <div className="controls">
+            <h3>Presets:</h3>
+            <button name="glider" onClick={e => this.presetObjects(e)}>
+              Glider
+            </button>
+            <button name="blinker" onClick={e => this.presetObjects(e)}>
+              Blinker
+            </button>
+            <button name="unsure" onClick={e => this.presetObjects(e)}>
+              Not Sure What This Is
+            </button>
+            <button name="otherblinker" onClick={e => this.presetObjects(e)}>
+              Another Blinker
+            </button>
+          </div>
         </div>
-        <div className="presets">
-          <h3>Presets:</h3>
-          <button name="glider" onClick={e => this.presetObjects(e)}>
-            Glider
-          </button>
-          <button name="blinker" onClick={e => this.presetObjects(e)}>
-            Blinker
-          </button>
-          <button name="unsure" onClick={e => this.presetObjects(e)}>
-            Not Sure What This Is
-          </button>
-          <button name="otherblinker" onClick={e => this.presetObjects(e)}>
-            Another Blinker
-          </button>
-        </div>
+        <Rules />
       </>
     );
   }

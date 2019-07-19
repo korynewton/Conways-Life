@@ -12,12 +12,12 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <header>Conway's Game of Life</header>
-        <div>
-          <GridCanvas width={540} height={540} cellHeight={20} cellWidth={20} />
-        </div>
-      </div>
+      <>
+        <header>
+          <h2>Conway's Game of Life</h2>
+        </header>
+        <GridCanvas width={540} height={540} cellHeight={20} cellWidth={20} />
+      </>
     );
   }
 }
