@@ -1,0 +1,63 @@
+.canvas {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cells {
+  z-index: 1;
+}
+
+.grid {
+  z-index: 0;
+}
+
+.canvasDiv {
+  position: relative;
+}
+
+.leftPannel {
+  border: 1px solid black;
+  width: 20%;
+  display: flex;
+  flex-flow: column;
+  margin: 10px;
+  justify-content: center;
+}
+
+/* .controls { */
+/* padding: 20px; */
+/* } */
+
+.controls h3 {
+  text-align: center;
+  margin: 10px;
+}
+
+.controls {
+  margin: 10px;
+}
+
+.rules {
+  border: 1px solid red;
+}
+.rules {
+  border: 1px solid black;
+  width: 20%;
+  display: flex;
+  flex-flow: column;
+  margin: 10px;
+  justify-content: center;
+}
+
+.rules p {
+  margin: 20px;
+}
+
+.rules h3 {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
+}
